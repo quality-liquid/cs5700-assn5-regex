@@ -161,19 +161,8 @@ class PasswordStateMachineTest {
         assertTrue(state.consumeCharacter('a') is ValidPassword, "Should stay in ValidPassword on non-special char")
         assertTrue(state.consumeCharacter('A') is ValidPassword, "Should stay in ValidPassword on non-special char")
         assertTrue(state.consumeCharacter('1') is ValidPassword, "Should stay in ValidPassword on non-special char")
-        assertTrue(state.consumeCharacter('!') is InvalidPassword, "Should transition to InvalidPassword on special char")
-        assertTrue(state.consumeCharacter('@') is InvalidPassword, "Should transition to InvalidPassword on special char")
-    }
-
-    @Test
-    fun `InvalidPassword should transition back to ValidPassword`() {
-        val state = InvalidPassword()
-        
-        assertTrue(state.consumeCharacter('a') is ValidPassword, "Should transition to ValidPassword on non-special char")
-        assertTrue(state.consumeCharacter('A') is ValidPassword, "Should transition to ValidPassword on non-special char")
-        assertTrue(state.consumeCharacter('1') is ValidPassword, "Should transition to ValidPassword on non-special char")
-        assertTrue(state.consumeCharacter('!') is InvalidPassword, "Should stay in InvalidPassword on special char")
-        assertTrue(state.consumeCharacter('@') is InvalidPassword, "Should stay in InvalidPassword on special char")
+        assertTrue(state.consumeCharacter('!') is LookingForNonSpecialChar, "Should transition to LookingForNonSpecialChar on special char")
+        assertTrue(state.consumeCharacter('@') is LookingForNonSpecialChar, "Should transition to LookingForNonSpecialChar on special char")
     }
 
     @Test
@@ -204,7 +193,7 @@ class PasswordStateMachineTest {
     }
 
     @Test
-    fun `test password ending with special character`() {
+    fun `test password ending with special character becomes invalid`() {
         // Test "Abbbbbbb!" (invalid - ends with special char)
         var state: State = LookingForAllRequirements()
         
@@ -224,23 +213,41 @@ class PasswordStateMachineTest {
     }
 
     @Test
-    fun `test all special characters are recognized`() {
-        val specialChars = "!@#$%&*"
-        val state = LookingForAllRequirements()
+    fun `test ValidPassword transitions back to LookingForNonSpecialChar on special chars`() {
+        // Test sequence that goes: ValidPassword -> LookingForNonSpecialChar -> ValidPassword
+        var state: State = ValidPassword()
         
-        for (char in specialChars) {
-            val result = state.consumeCharacter(char)
-            assertTrue(result is LookingForCapital, "Special character '$char' should be recognized")
-        }
+        state = state.consumeCharacter('!')
+        assertTrue(state is LookingForNonSpecialChar, "Should transition to LookingForNonSpecialChar on special char")
+        
+        state = state.consumeCharacter('a')
+        assertTrue(state is ValidPassword, "Should transition back to ValidPassword on non-special char")
     }
 
     @Test
-    fun `test all capital letters are recognized`() {
-        val state = LookingForAllRequirements()
+    fun `test password with special char in middle is valid if ends with non-special`() {
+        // Test "A!b@c#d" - should be valid as it ends with non-special char
+        var state: State = LookingForAllRequirements()
         
-        for (char in 'A'..'Z') {
-            val result = state.consumeCharacter(char)
-            assertTrue(result is LookingForSpecialCharacter, "Capital letter '$char' should be recognized")
-        }
+        state = state.consumeCharacter('A')
+        assertTrue(state is LookingForSpecialCharacter, "Should be in LookingForSpecialCharacter")
+        
+        state = state.consumeCharacter('!')
+        assertTrue(state is LookingForNonSpecialChar, "Should be in LookingForNonSpecialChar")
+        
+        state = state.consumeCharacter('b')
+        assertTrue(state is ValidPassword, "Should be in ValidPassword")
+        
+        state = state.consumeCharacter('@')
+        assertTrue(state is LookingForNonSpecialChar, "Should transition back to LookingForNonSpecialChar")
+        
+        state = state.consumeCharacter('c')
+        assertTrue(state is ValidPassword, "Should be in ValidPassword")
+        
+        state = state.consumeCharacter('#')
+        assertTrue(state is LookingForNonSpecialChar, "Should transition back to LookingForNonSpecialChar")
+        
+        state = state.consumeCharacter('d')
+        assertTrue(state is ValidPassword, "Should end in ValidPassword - valid password")
     }
 }
