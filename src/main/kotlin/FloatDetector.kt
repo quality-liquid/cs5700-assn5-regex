@@ -2,8 +2,6 @@ package org.example
 
 import org.example.floatState.FloatingPoint
 import org.example.floatState.LookingForZeroFirst
-import org.example.integerState.Integer
-import org.example.integerState.LookingForDigit
 
 class FloatDetector {
     var state: State = LookingForZeroFirst()
