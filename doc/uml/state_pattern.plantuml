@@ -1,0 +1,19 @@
+@startuml
+
+interface State {
+    + consumeChar(character: char): State
+}
+
+class ConcreteState implements State {
+    + consumeChar(character: char): State
+}
+
+class StateMachine {
+    - currentState: State
+    + consumeChar(character: char): void
+    + isValid(): boolean
+}
+
+StateMachine *-- State
+
+@enduml
