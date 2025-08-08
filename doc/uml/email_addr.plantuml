@@ -1,0 +1,28 @@
+@startuml
+
+[*] --> LookingForFirstCharPartA
+
+LookingForFirstCharPartA --> WaitingForAtSymbol: any character except '@' or SPACE
+LookingForFirstCharPartA --> Invalid: '@' or SPACE
+
+WaitingForAtSymbol --> LookingForFirstCharPartB: '@'
+WaitingForAtSymbol --> WaitingForAtSymbol: any character except '@' or SPACE
+WaitingForAtSymbol --> Invalid: SPACE
+
+LookingForFirstCharPartB --> WaitingForPeriod: any character except '@' SPACE or '.'
+LookingForFirstCharPartB --> Invalid: '@' or SPACE or '.'
+
+WaitingForPeriod --> LookingForFirstCharPartC: '.'
+WaitingForPeriod --> WaitingForPeriod: any character except '@' SPACE or '.'
+WaitingForPeriod --> Invalid: '@' or SPACE
+
+LookingForFirstCharPartC --> Valid: any character except '@' SPACE or '.'
+LookingForFirstCharPartC --> Invalid: '@' or SPACE or '.'
+
+Valid --> Valid: any character except '@' SPACE or '.'
+Valid --> [*]
+Valid --> Invalid: '@' or SPACE or '.'
+
+Invalid --> [*]
+
+@enduml
