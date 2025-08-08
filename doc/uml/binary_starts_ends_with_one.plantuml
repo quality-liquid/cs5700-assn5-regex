@@ -1,0 +1,19 @@
+@startuml
+
+[*] --> LookingForOneFirst
+LookingForOneFirst --> Valid: 1
+LookingForOneFirst --> Invalid: anything else
+
+Valid --> Valid: 1
+Valid --> Incomplete: 0
+Valid --> Invalid: anything else
+Valid --> [*]
+
+Incomplete --> Valid: 1
+Incomplete --> Incomplete: 0
+Incomplete --> Invalid: anything else
+Incomplete --> [*]
+
+Invalid --> [*]
+
+@enduml
