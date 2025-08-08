@@ -6,7 +6,7 @@ import org.example.floatState.LookingForZeroFirst
 class FloatDetector {
     var state: State = LookingForZeroFirst()
 
-    fun detectInteger(candidate: String): Boolean {
+    fun detect(candidate: String): Boolean {
         state = LookingForZeroFirst()
         for (char in candidate) {
             state = state.consumeCharacter(char)

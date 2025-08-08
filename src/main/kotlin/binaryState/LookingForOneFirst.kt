@@ -5,7 +5,7 @@ import org.example.State
 class LookingForOneFirst: State {
     override fun consumeCharacter(character: Char): State {
         return if (character == '1') {
-            ValidBInaryNumber()
+            ValidBinaryNumber()
         } else {
             return InvalidBinaryNumber()
         }

@@ -19,7 +19,7 @@ class FloatStateMachineTest {
         val validFloats = listOf("0.1", "0.5", "0.123", "0.999", "0.0")
         
         for (float in validFloats) {
-            assertTrue(detector.detectInteger(float), "Should detect '$float' as valid float")
+            assertTrue(detector.detect(float), "Should detect '$float' as valid float")
         }
     }
 
@@ -28,7 +28,7 @@ class FloatStateMachineTest {
         val validFloats = listOf("1.0", "1.5", "12.34", "999.001", "123.456789")
         
         for (float in validFloats) {
-            assertTrue(detector.detectInteger(float), "Should detect '$float' as valid float")
+            assertTrue(detector.detect(float), "Should detect '$float' as valid float")
         }
     }
 
@@ -37,7 +37,7 @@ class FloatStateMachineTest {
         val integers = listOf("0", "1", "12", "123", "999")
         
         for (integer in integers) {
-            assertFalse(detector.detectInteger(integer), "Should reject '$integer' as not a float")
+            assertFalse(detector.detect(integer), "Should reject '$integer' as not a float")
         }
     }
 
@@ -46,7 +46,7 @@ class FloatStateMachineTest {
         val invalidFloats = listOf("01.5", "007.123", "00.1")
         
         for (float in invalidFloats) {
-            assertFalse(detector.detectInteger(float), "Should reject '$float' as invalid float")
+            assertFalse(detector.detect(float), "Should reject '$float' as invalid float")
         }
     }
 
@@ -55,7 +55,7 @@ class FloatStateMachineTest {
         val incompleteFloats = listOf("1.", "0.", "123.", ".")
         
         for (float in incompleteFloats) {
-            assertFalse(detector.detectInteger(float), "Should reject '$float' as incomplete float")
+            assertFalse(detector.detect(float), "Should reject '$float' as incomplete float")
         }
     }
 
@@ -64,25 +64,25 @@ class FloatStateMachineTest {
         val invalidStrings = listOf("1.a", "a.1", "1.2.3", "1-2", "1+2", "1 .2", "abc")
         
         for (string in invalidStrings) {
-            assertFalse(detector.detectInteger(string), "Should reject '$string' as invalid float")
+            assertFalse(detector.detect(string), "Should reject '$string' as invalid float")
         }
     }
 
     @Test
     fun `FloatDetector should reject empty string`() {
-        assertFalse(detector.detectInteger(""), "Should reject empty string as invalid float")
+        assertFalse(detector.detect(""), "Should reject empty string as invalid float")
     }
 
     @Test
     fun `FloatDetector state should reset between calls`() {
         // First call with invalid input
-        assertFalse(detector.detectInteger("0abc"))
+        assertFalse(detector.detect("0abc"))
         
         // Second call with valid input should work
-        assertTrue(detector.detectInteger("1.23"))
+        assertTrue(detector.detect("1.23"))
         
         // Third call with another valid input
-        assertTrue(detector.detectInteger("0.456"))
+        assertTrue(detector.detect("0.456"))
     }
 
     // Test individual state classes

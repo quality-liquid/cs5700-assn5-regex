@@ -7,7 +7,7 @@ class Incomplete: State {
         return if (character == '0') {
             this
         } else if (character == '1') {
-            ValidBInaryNumber()
+            ValidBinaryNumber()
         } else {
             InvalidBinaryNumber()
         }
