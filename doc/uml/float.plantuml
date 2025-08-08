@@ -1,5 +1,24 @@
 @startuml
 
 [*] --> LookingForZeroFirst
+LookingForZeroFirst --> PeriodRequired: 0
+LookingForZeroFirst --> WaitingForPeriod: [1-9]
+LookingForZeroFirst --> NotFloat: anything else
+
+PeriodRequired --> DigitRequired: .
+PeriodRequired --> NotFloat: anything else
+
+WaitingForPeriod --> DigitRequired: .
+WaitingForPeriod --> WaitingForPeriod: [0-9]
+WaitingForPeriod --> NotFloat: anything else
+
+DigitRequired --> Float: [0-9]
+DigitRequired --> NotFloat: anything else
+
+Float --> Float: [0-9]
+Float --> [*]
+Float --> NotFloat: anything else
+
+NotFloat --> [*]
 
 @enduml

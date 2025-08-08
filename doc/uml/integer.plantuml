@@ -2,10 +2,10 @@
 
 [*] --> LookingForDigit
 LookingForDigit --> Integer: [1-9]
-LookingForDigit --> Error: anything else
+LookingForDigit --> NotInteger: anything else
 Integer --> Integer: [0-9]
 Integer --> [*]
-Integer --> Error: anything else
-Error --> [*]
+Integer --> NotInteger: anything else
+NotInteger --> [*]
 
 @enduml
