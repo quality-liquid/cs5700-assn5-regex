@@ -1,9 +1,12 @@
 package org.example.complexPasswordState
 
+import org.example.SPECIAL_CHARACTERS
 import org.example.State
 
 class InvalidPassword: State {
     override fun consumeCharacter(character: Char): State {
-        TODO("Not yet implemented")
+        return if (character in SPECIAL_CHARACTERS) {
+            this
+        } else ValidPassword()
     }
 }
